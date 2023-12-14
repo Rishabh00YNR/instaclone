@@ -1,9 +1,16 @@
-var express = require('express');
-var router = express.Router();
+const mongoose = require('mongoose');
+const plm = require('passport-local-mongoose');
+mongoose.connect("mongodb://127.0.0.1:27017/instaclone");
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+const userSchema = mongoose.Schema({
+  username: String,
+  name:String,
+  password: String,
+  email: String,
+  profileImage: String,
+  posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }]
+})
 
-module.exports = router;
+userSchema.plugin(plm);
+
+module.exports = mongoose.model('User', userSchema);
